@@ -1,7 +1,6 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import isDev from 'electron-is-dev';
 import pkg from 'electron-updater';
 import { fork } from 'child_process';
 import Store from 'electron-store';
@@ -42,6 +41,8 @@ function createServer() {
 }
 
 function createWindow() {
+  const iconPath = path.join(__dirname, '..', 'public', 'favicon.png');
+  
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
@@ -54,10 +55,10 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
     },
-    icon: path.join(__dirname, '..', 'public', 'favicon.png'),
+    icon: iconPath,
   });
 
-  if (isDev) {
+  if (!app.isPackaged) {
     mainWindow.loadURL('http://localhost:5173');
     mainWindow.webContents.openDevTools();
   } else {
