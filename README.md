@@ -79,5 +79,6 @@ Once the build is finished:
 - `server/`: Offline Express server using `better-sqlite3`.
 - `public/`: Assets like icons and logos.
 
-## 📄 License
+## 📄 Credits & License
+Developed and Maintained by **Code Clover Studio**. 
 Internal Application - Nandkishor Readymade.

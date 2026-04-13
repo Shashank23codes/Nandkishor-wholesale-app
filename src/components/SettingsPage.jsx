@@ -30,7 +30,8 @@ export default function SettingsPage() {
     if (newPath) {
       setStoragePath(newPath)
       window.electron.restartServer()
-      toast.success('Storage path updated! Server restarted.')
+      toast.success('Database folder updated! Reloading app...', { duration: 3000 })
+      setTimeout(() => window.location.reload(), 1500)
     }
   }
 
@@ -44,7 +45,8 @@ export default function SettingsPage() {
     if (newPath) {
       setPosterPath(newPath)
       window.electron.restartServer()
-      toast.success('Poster location updated! Server restarted.')
+      toast.success('Poster location updated! Reloading app...', { duration: 3000 })
+      setTimeout(() => window.location.reload(), 1500)
     }
   }
 
@@ -164,7 +166,7 @@ export default function SettingsPage() {
 
         {/* About Info */}
         <div className="md:col-span-2 text-center pt-6 opacity-30">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Nandkishor Wholesale · 2024 Release · v1.0.0</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Nandkishor Wholesale · 2024 · Developed by Code Clover Studio</p>
         </div>
       </div>
     </div>

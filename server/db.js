@@ -11,7 +11,7 @@ const storagePath = process.env.DATA_STORAGE_PATH;
 const appDataDir = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + '/.local/share');
 const defaultPath = path.join(appDataDir, 'nandkishor-wholesale');
 
-const baseDir = (storagePath && fs.existsSync(storagePath)) ? storagePath : defaultPath;
+const baseDir = (storagePath && storagePath.trim() !== '') ? storagePath : defaultPath;
 
 if (!fs.existsSync(baseDir)) {
     fs.mkdirSync(baseDir, { recursive: true });

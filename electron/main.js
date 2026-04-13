@@ -54,7 +54,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
     },
-    icon: path.join(__dirname, '..', 'public', 'logo.png'), // Need to ensure an icon exists
+    icon: path.join(__dirname, '..', 'public', 'favicon.png'),
   });
 
   if (isDev) {
@@ -92,11 +92,16 @@ app.on('activate', () => {
 
 // 1. Pick a folder (Data)
 ipcMain.handle('select-folder', async () => {
-  const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openDirectory']
+  const win = mainWindow || BrowserWindow.getFocusedWindow();
+  console.log('IPC: select-folder triggered');
+  const result = await dialog.showOpenDialog(win, {
+    properties: ['openDirectory'],
+    title: 'Select Database & Images Folder'
   });
+  
   if (!result.canceled) {
     const path = result.filePaths[0];
+    console.log('IPC: folder selected:', path);
     store.set('data_storage_path', path);
     return path;
   }
@@ -110,11 +115,16 @@ ipcMain.handle('get-storage-path', () => {
 
 // 3. Pick a folder (Posters)
 ipcMain.handle('select-poster-folder', async () => {
-  const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ['openDirectory']
+  const win = mainWindow || BrowserWindow.getFocusedWindow();
+  console.log('IPC: select-poster-folder triggered');
+  const result = await dialog.showOpenDialog(win, {
+    properties: ['openDirectory'],
+    title: 'Select Showcase Posters Folder'
   });
+  
   if (!result.canceled) {
     const path = result.filePaths[0];
+    console.log('IPC: poster folder selected:', path);
     store.set('poster_storage_path', path);
     return path;
   }
@@ -128,8 +138,14 @@ ipcMain.handle('get-poster-storage-path', () => {
 
 // 5. Restart server (To apply new paths)
 ipcMain.on('restart-server', () => {
+  console.log('IPC: restart-server requested');
   if (serverProcess) {
+    serverProcess.once('exit', () => {
+      console.log('Server process exited. Restarting with new paths...');
+      createServer();
+    });
     serverProcess.kill();
+  } else {
     createServer();
   }
 });

@@ -21,14 +21,17 @@ const posterStoragePath = process.env.POSTER_STORAGE_PATH;
 const appDataDir = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + '/.local/share');
 const defaultPath = path.join(appDataDir, 'nandkishor-wholesale');
 
-const baseDir = (storagePath && fs.existsSync(storagePath)) ? storagePath : defaultPath;
+// Use storagePath if it exists as a string, otherwise use default
+const baseDir = (storagePath && storagePath.trim() !== '') ? storagePath : defaultPath;
 const imagesDir = path.join(baseDir, 'images');
 
-// Posters directory - if custom path exists, use it, else put it inside baseDir
-const postersDir = (posterStoragePath && fs.existsSync(posterStoragePath)) 
+// Posters directory - if custom path exists and is not empty, use it, else put it inside baseDir
+const postersDir = (posterStoragePath && posterStoragePath.trim() !== '') 
   ? posterStoragePath 
   : path.join(baseDir, 'posters');
 
+// Create directories if they don't exist
+if (!fs.existsSync(baseDir)) fs.mkdirSync(baseDir, { recursive: true });
 if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });
 if (!fs.existsSync(postersDir)) fs.mkdirSync(postersDir, { recursive: true });
 

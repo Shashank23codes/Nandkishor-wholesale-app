@@ -419,7 +419,7 @@ function SocialSquareLayout({ p, colors, sizes, customDesc, theme }) {
           //  position: 'absolute', top: '55%', right: '40px', zIndex: 20,
           //  width: '260px', textAlign: 'right', color: secondaryColor
           position: 'absolute', top: '55%', right: '40px', zIndex: 20,
-          width: '260px', textAlign: 'right', 
+          textAlign: 'right', 
           background: primaryColor, border: `4px solid ${textColor}`, padding: '15px 30px', borderRadius: '12px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.3)', width: 'fit-content'
         }}>
