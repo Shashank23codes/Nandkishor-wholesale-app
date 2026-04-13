@@ -76,7 +76,8 @@ export default function ShowcasePage({ product: p, onClose }) {
       })
       
       if (res.ok) {
-        alert('Poster saved successfully to your local folder!')
+        const data = await res.json()
+        alert(`Poster saved successfully!\nLocation: ${data.path}`)
       } else {
         throw new Error('Failed to save to PC')
       }

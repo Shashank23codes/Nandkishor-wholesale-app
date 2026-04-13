@@ -17,35 +17,49 @@ const PORT = process.env.PORT || 5000;
 
 // Storage Logic
 const storagePath = process.env.DATA_STORAGE_PATH;
+const posterStoragePath = process.env.POSTER_STORAGE_PATH;
 const appDataDir = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + '/.local/share');
 const defaultPath = path.join(appDataDir, 'nandkishor-wholesale');
+
 const baseDir = (storagePath && fs.existsSync(storagePath)) ? storagePath : defaultPath;
 const imagesDir = path.join(baseDir, 'images');
 
-if (!fs.existsSync(imagesDir)) {
-  fs.mkdirSync(imagesDir, { recursive: true });
-}
+// Posters directory - if custom path exists, use it, else put it inside baseDir
+const postersDir = (posterStoragePath && fs.existsSync(posterStoragePath)) 
+  ? posterStoragePath 
+  : path.join(baseDir, 'posters');
+
+if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });
+if (!fs.existsSync(postersDir)) fs.mkdirSync(postersDir, { recursive: true });
 
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '100mb' })); 
 app.use('/images', express.static(imagesDir));
+app.use('/posters', express.static(postersDir)); // Serve posters as well
 
 // Helper: Save Base64 to file
-const saveImage = (base64Data, filename) => {
+const saveImage = (base64Data, filename, customDir = null) => {
   if (!base64Data || !base64Data.startsWith('data:image')) return base64Data;
   
   try {
+    const targetDir = customDir || imagesDir;
     const parts = base64Data.split(';base64,');
     if (parts.length < 2) return base64Data;
     
     const extension = base64Data.split(';')[0].split('/')[1];
     const base64Image = parts.pop();
     const newFilename = `${filename}_${Date.now()}.${extension}`;
-    const filePath = path.join(imagesDir, newFilename);
+    const filePath = path.join(targetDir, newFilename);
     
     fs.writeFileSync(filePath, base64Image, { encoding: 'base64' });
-    return `http://localhost:${PORT}/images/${newFilename}`;
+    
+    // If it's the imagesDir, return the local URL. 
+    // If it's a custom posters dir, we just return the path for confirmation.
+    if (targetDir === imagesDir) {
+      return `http://localhost:${PORT}/images/${newFilename}`;
+    }
+    return filePath;
   } catch (err) {
     console.error('Error saving image:', err);
     return base64Data;
@@ -165,7 +179,7 @@ app.delete('/api/products/:id', (req, res) => {
 app.post('/api/save-poster', (req, res) => {
   try {
     const { image, filename } = req.body;
-    const finalPath = saveImage(image, filename || 'poster');
+    const finalPath = saveImage(image, filename || 'poster', postersDir);
     res.json({ success: true, path: finalPath });
   } catch (err) {
     res.status(500).json({ message: err.message });

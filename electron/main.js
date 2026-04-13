@@ -19,10 +19,17 @@ function createServer() {
   // Path to the express server entry point
   const serverPath = path.join(__dirname, '..', 'server', 'server.js');
   const storagePath = store.get('data_storage_path') || '';
+  const posterPath = store.get('poster_storage_path') || '';
 
   // Start server as a child process
   serverProcess = fork(serverPath, [], {
-    env: { ...process.env, PORT: 5000, IS_ELECTRON: true, DATA_STORAGE_PATH: storagePath }
+    env: { 
+      ...process.env, 
+      PORT: 5000, 
+      IS_ELECTRON: true, 
+      DATA_STORAGE_PATH: storagePath,
+      POSTER_STORAGE_PATH: posterPath
+    }
   });
 
   serverProcess.on('message', (msg) => {
@@ -83,7 +90,7 @@ app.on('activate', () => {
 
 /* ── IPC Handlers (Native Windows functions) ── */
 
-// 1. Pick a folder
+// 1. Pick a folder (Data)
 ipcMain.handle('select-folder', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     properties: ['openDirectory']
@@ -101,7 +108,33 @@ ipcMain.handle('get-storage-path', () => {
   return store.get('data_storage_path') || null;
 });
 
-// 3. Auto Updater Events
+// 3. Pick a folder (Posters)
+ipcMain.handle('select-poster-folder', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory']
+  });
+  if (!result.canceled) {
+    const path = result.filePaths[0];
+    store.set('poster_storage_path', path);
+    return path;
+  }
+  return null;
+});
+
+// 4. Get current poster storage path
+ipcMain.handle('get-poster-storage-path', () => {
+  return store.get('poster_storage_path') || null;
+});
+
+// 5. Restart server (To apply new paths)
+ipcMain.on('restart-server', () => {
+  if (serverProcess) {
+    serverProcess.kill();
+    createServer();
+  }
+});
+
+// 6. Auto Updater Events
 autoUpdater.on('update-available', () => {
   mainWindow.webContents.send('update-available');
 });

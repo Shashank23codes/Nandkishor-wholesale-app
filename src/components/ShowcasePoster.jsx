@@ -138,7 +138,7 @@ function ClassicLayout({ p, colors, sizes }) {
       id="live-poster-node"
       style={{
         display: 'flex', width: '1200px', minHeight: '750px', height: 'auto',
-        borderRadius: '32px', overflow: 'hidden',
+        borderRadius: 'none', overflow: 'hidden',
         boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
         fontFamily: '"Inter", sans-serif', margin: '0 auto', position: 'relative',
         background: '#fff'
