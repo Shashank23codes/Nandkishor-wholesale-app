@@ -20,8 +20,11 @@ function createServer() {
   const storagePath = store.get('data_storage_path') || '';
   const posterPath = store.get('poster_storage_path') || '';
 
-  // Start server as a child process
+  console.log(`🚀 Starting background server: ${serverPath}`);
+
+  // Start server as a child process with piped output
   serverProcess = fork(serverPath, [], {
+    silent: true, // This allows us to capture stdout/stderr
     env: { 
       ...process.env, 
       PORT: 5000, 
@@ -31,12 +34,24 @@ function createServer() {
     }
   });
 
+  serverProcess.stdout.on('data', (data) => {
+    console.log(`[Server]: ${data}`);
+  });
+
+  serverProcess.stderr.on('data', (data) => {
+    console.error(`[Server Error]: ${data}`);
+  });
+
   serverProcess.on('message', (msg) => {
-    console.log('Server message:', msg);
+    console.log('[Server Message]:', msg);
+  });
+
+  serverProcess.on('exit', (code) => {
+    console.error(`[Server]: Process exited with code ${code}`);
   });
 
   serverProcess.on('error', (err) => {
-    console.error('Server error:', err);
+    console.error('[Server]: Process error:', err);
   });
 }
 
