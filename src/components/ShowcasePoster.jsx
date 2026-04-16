@@ -119,9 +119,8 @@ function StatPill({ label, value, accentRaw }) {
   )
 }
 
-/** ── Layout 01: Classic Split (User's Exact UI - Fixed) ── */
+/** ── Layout 01: Classic Split (Refined & Responsive) ── */
 function ClassicLayout({ p, colors, sizes }) {
-  // Define variables used in user's UI snippet
   const palette = {
     bg: '#0f172a',
     accent: '#fbce1b',
@@ -129,17 +128,17 @@ function ClassicLayout({ p, colors, sizes }) {
     pillAccent: '#f59e0b'
   }
   const imgUrl = p.images?.[0]?.src || ''
-  const firstVariant = p.sizePricings?.[0] || { size: 'XS', price: '0' }
-  const currentPrice = firstVariant.price
-  const selectedSize = firstVariant.size
+  
+  const hasColors = p.colors?.filter(Boolean).length > 0
+  const hasSizes = p.sizePricings?.length > 0
 
   return (
     <div
       id="live-poster-node"
       style={{
         display: 'flex', width: '1200px', minHeight: '750px', height: 'auto',
-        borderRadius: 'none', overflow: 'hidden',
-        boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
+        borderRadius: '0px', overflow: 'hidden',
+        boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5)',
         fontFamily: '"Inter", sans-serif', margin: '0 auto', position: 'relative',
         background: '#fff'
       }}
@@ -148,121 +147,145 @@ function ClassicLayout({ p, colors, sizes }) {
       <div style={{
         flex: '0 0 45%', background: palette.bg, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column',
       }}>
-        {/* Background image with overlay */}
         <div style={{
           position: 'absolute', inset: 0, background: `url(${imgUrl}) center/cover no-repeat`,
-          filter: 'brightness(0.45) saturate(0.8)',
+          filter: 'brightness(0.35) blur(2px)', transform: 'scale(1.1)'
         }} />
-
-        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${palette.bg}ee 0%, transparent 60%, ${palette.bg}dd 100%)` }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60%', background: `linear-gradient(to top, ${palette.bg} 0%, transparent 100%)` }} />
-
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${palette.bg}cc, transparent)` }} />
+        
         {/* Brand badge top-left */}
         <div style={{
-          position: 'relative', zIndex: 10, margin: '28px', display: 'flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', borderRadius: '12px',
-          padding: '8px 14px', border: '1px solid rgba(255,255,255,0.12)', width: 'fit-content',
+          position: 'relative', zIndex: 10, margin: '32px', display: 'flex', alignItems: 'center', gap: '8px',
+          background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', borderRadius: '14px',
+          padding: '10px 18px', border: '1px solid rgba(255,255,255,0.2)', width: 'fit-content',
         }}>
           <Zap size={14} fill={palette.accent} color={palette.accent} />
-          <span style={{ color: 'white', fontSize: '12px', fontWeight: 800, letterSpacing: '0.5px' }}>nandkishor readymade</span>
-          <ShieldCheck size={12} fill="#0095f6" color="white" />
+          <span style={{ color: 'white', fontSize: '12px', fontWeight: 900, letterSpacing: '1px', textTransform: 'uppercase' }}>nandkishor readymade</span>
         </div>
 
         {/* Main product image spotlight */}
         <div style={{
-          position: 'sticky', top: '50px', margin: 'auto',
-          width: '80%', height: '500px', background: `url(${imgUrl}) center/cover no-repeat #f3f4f6`,
-          borderRadius: '20px', boxShadow: `0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px ${palette.accent}30`,
-          filter: 'brightness(1.05) saturate(1.1)', zIndex: 5
+          position: 'relative', margin: 'auto',
+          width: '85%', height: '550px', background: `url(${imgUrl}) center/contain no-repeat`,
+          borderRadius: '24px', filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.8))', zIndex: 5
         }} />
-
       </div>
 
       {/* ── RIGHT: INFO PANEL ──────────────────────────────────────── */}
-      <div style={{ flex: 1, background: '#ffffff', display: 'flex', flexDirection: 'column', padding: '36px 40px', position: 'relative' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(${palette.accent}08 1px, transparent 1px)`, backgroundSize: '24px 24px', pointerEvents: 'none' }} />
+      <div style={{ flex: 1, background: '#ffffff', display: 'flex', flexDirection: 'column', padding: '48px', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: 0, right: 0, width: '300px', height: '300px', background: `radial-gradient(circle at top right, ${palette.accent}15, transparent 70%)`, pointerEvents: 'none' }} />
 
-        <div style={{ position: 'relative', zIndex: 1, marginBottom: '28px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div style={{ flex: 1, paddingRight: '20px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: palette.tag, border: `1px solid ${palette.accent}40`, color: palette.accent, padding: '4px 12px', borderRadius: '8px', fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', marginBottom: '12px' }}>
-              <Award size={10} /> {p.category || 'COLLECTION'}
-            </div>
-            <h1 style={{ fontSize: '32px', fontWeight: 900, color: '#0f172a', lineHeight: 1.2 }}>
+        {/* Header Section */}
+        <div style={{ position: 'relative', zIndex: 1, marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}>
+            {p.category && (
+              <div style={{ 
+                display: 'inline-flex', alignItems: 'center', gap: '8px', 
+                background: '#000', color: palette.accent, 
+                padding: '6px 14px', borderRadius: '100px', 
+                fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', 
+                marginBottom: '16px', letterSpacing: '1px' 
+              }}>
+                <Award size={12} /> {p.category}
+              </div>
+            )}
+            <h1 style={{ fontSize: '42px', fontWeight: 900, color: '#0f172a', lineHeight: 1.1, textTransform: 'uppercase' }}>
               {p.name}
-              {/* {p.customCode && <span style={{ opacity: 0.4, fontWeight: 300, fontSize: '0.6em', marginLeft: '12px' }}>{p.customCode}</span>} */}
             </h1>
           </div>
-          <div style={{ background: '#000000', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '8px 12px', minWidth: '120px' }}>
-            <p style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600 }}>Product Code</p>
-            <p style={{ fontSize: '16px', fontWeight: 800, color: 'white' }}>{p.customCode || p.autoId}</p>
+          <div style={{ background: '#f8fafc', border: '2px solid #e2e8f0', borderRadius: '16px', padding: '12px 20px', textAlign: 'right' }}>
+            <p style={{ fontSize: '11px', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Model Code</p>
+            <p style={{ fontSize: '20px', fontWeight: 900, color: '#0f172a', fontFamily: 'monospace' }}>{p.customCode || p.autoId}</p>
           </div>
         </div>
 
-        <div style={{ position: 'relative', zIndex: 1, background: '#0f172a', borderRadius: '24px', padding: '24px', marginBottom: '28px', border: `1px solid ${palette.accent}20` }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: `1px solid ${palette.accent}30`, paddingBottom: '12px' }}>
-            <p style={{ fontSize: '12px', fontWeight: 800, color: palette.accent, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Pricing Table</p>
-            <div style={{ background: palette.accent, color: palette.bg, padding: '4px 10px', borderRadius: '100px', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}>
-              NET RATES
+        {/* Pricing Matrix */}
+        {hasSizes && (
+          <div style={{ position: 'relative', zIndex: 1, background: '#0f172a', borderRadius: '28px', padding: '32px', marginBottom: '32px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '4px', height: '18px', background: palette.accent, borderRadius: '2px' }} />
+                <p style={{ fontSize: '14px', fontWeight: 900, color: '#fff', textTransform: 'uppercase', letterSpacing: '1.5px', margin: 0 }}>Size & Price Matrix</p>
+              </div>
+              <span style={{ fontSize: '10px', fontWeight: 900, color: palette.accent, border: `1px solid ${palette.accent}40`, padding: '4px 10px', borderRadius: '6px' }}>B2B NET RATES</span>
             </div>
-          </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: p.sizePricings?.length > 4 ? 'repeat(2, 1fr)' : '1fr',
-            gap: '8px',
-            padding: '4px'
-          }}>
-            {p.sizePricings?.length > 0 ? (
-              p.sizePricings.map((sp, i) => (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: p.sizePricings.length > 4 ? 'repeat(2, 1fr)' : '1fr',
+              gap: '12px'
+            }}>
+              {p.sizePricings.map((sp, i) => (
                 <div key={i} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '10px 16px',
-                  background: 'rgba(255,255,255,0.03)',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255,255,255,0.05)'
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '14px 20px', background: 'rgba(255,255,255,0.05)',
+                  borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)'
                 }}>
-                  <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', fontWeight: 600 }}>Size {sp.size}</span>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ color: palette.accent, fontSize: '20px', fontWeight: 800 }}>₹</span>
-                    <span style={{ color: 'white', fontSize: '20px', fontWeight: 900 }}>{sp.price}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', fontWeight: 700 }}>Size {sp.size}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ color: palette.accent, fontSize: '16px', fontWeight: 800 }}>₹</span>
+                    <span style={{ color: 'white', fontSize: '24px', fontWeight: 900 }}>{sp.price}</span>
                   </div>
                 </div>
-              ))
-            ) : (
-              <p style={{ color: 'white', opacity: 0.5, fontSize: '12px', textAlign: 'center' }}>No variants available</p>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Variations (Colors & Sizes List) */}
+        {(hasColors || hasSizes) && (
+          <div style={{ 
+            position: 'relative', zIndex: 1, 
+            display: 'grid', 
+            gridTemplateColumns: (hasColors && hasSizes) ? '1fr 1fr' : '1fr', 
+            gap: '20px', marginBottom: '40px' 
+          }}>
+            {hasColors && (
+              <StatPill
+                label="Available Colors"
+                accentRaw={palette.pillAccent}
+                value={p.colors.filter(Boolean).map((c, i) => {
+                  const name = typeof c === 'object' ? c.name : c;
+                  const hex = typeof c === 'object' ? c.hex : c;
+                  return (
+                    <div key={i} style={{ 
+                      display: 'flex', alignItems: 'center', gap: '8px', 
+                      background: '#f8fafc', padding: '6px 12px', borderRadius: '12px', 
+                      border: '1px solid #e2e8f0', boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                    }}>
+                      <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: hex, border: '1px solid rgba(0,0,0,0.1)' }} />
+                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#1e293b' }}>{name}</span>
+                    </div>
+                  );
+                })}
+              />
+            )}
+            {hasSizes && (
+              <StatPill 
+                label="Size Variations" 
+                value={p.sizePricings.map(s => s.size).join(' • ')} 
+                accentRaw={palette.pillAccent} 
+              />
             )}
           </div>
-        </div>
+        )}
 
-        <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginBottom: '32px' }}>
-          <StatPill
-            label="Colors"
-            accentRaw={palette.pillAccent || palette.accent}
-            value={p.colors?.filter(Boolean).map((c, i) => {
-              const name = typeof c === 'object' ? c.name : c;
-              const hex = typeof c === 'object' ? c.hex : c;
-              return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#f1f5f9', padding: '4px 10px', borderRadius: '100px', border: '1px solid #e2e8f0' }}>
-                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: hex, border: '1px solid rgba(0,0,0,0.1)' }} />
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>{name}</span>
-                </div>
-              );
-            }) || 'Standard'}
-          />
-          <StatPill label="Sizes List" value={sizes} accentRaw={palette.pillAccent || palette.accent} />
-        </div>
-
-        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '32px', borderTop: '1px solid #f1f5f9' }}>
+        {/* Footer section */}
+        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '32px', borderTop: '2px solid #f1f5f9' }}>
           <div>
-            <p style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 700 }}>Quality Guaranteed by</p>
-            <h4 style={{ fontSize: '16px', fontWeight: 900, textTransform: 'uppercase', color: palette.accent }}>nandkishor readymade</h4>
+            <p style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 800, textTransform: 'uppercase', marginBottom: '8px' }}>Crafted with Quality</p>
+            <h4 style={{ fontSize: '20px', fontWeight: 950, textTransform: 'uppercase', color: '#0f172a', letterSpacing: '-0.5px' }}>
+              nandkishor <span style={{ color: palette.accent }}>readymade</span>
+            </h4>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <Truck size={14} color={palette.accent} />
-            <Globe size={14} color={palette.accent} />
-            <Award size={14} color={palette.accent} />
+          <div style={{ display: 'flex', gap: '16px', background: '#f8fafc', padding: '12px 20px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
+              <Truck size={16} /> <span style={{ fontSize: '10px', fontWeight: 800 }}>PAN INDIA</span>
+            </div>
+            <div style={{ width: '1px', background: '#e2e8f0' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
+              <Award size={16} /> <span style={{ fontSize: '10px', fontWeight: 800 }}>BULK ONLY</span>
+            </div>
           </div>
         </div>
       </div>
