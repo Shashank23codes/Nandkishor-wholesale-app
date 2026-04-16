@@ -86,32 +86,48 @@ export default function ShowcasePoster({ product, layout = 'classic', customDesc
   )
 }
 
-/** ── Helper: StatPill (as per User UI) ── */
+/** ── Helper: StatPill (Enhanced Visibility) ── */
 function StatPill({ label, value, accentRaw }) {
   const isString = typeof value === 'string';
   return (
     <div style={{
-      flex: 1, background: '#fff', border: '1px solid #edf2f7', borderRadius: '32px',
-      padding: '24px', position: 'relative', borderLeftWidth: '10px', borderLeftColor: accentRaw,
-      boxShadow: '0 20px 40px rgba(0,0,0,0.03)', minHeight: '120px', display: 'flex', flexDirection: 'column'
+      flex: 1, 
+      background: '#ffffff', 
+      border: '2px solid #f1f5f9', 
+      borderRadius: '24px',
+      padding: '24px', 
+      position: 'relative', 
+      borderLeftWidth: '8px', 
+      borderLeftColor: accentRaw,
+      boxShadow: '0 12px 24px -4px rgba(0,0,0,0.12), 0 4px 8px -4px rgba(0,0,0,0.06)', 
+      minHeight: '130px', 
+      display: 'flex', 
+      flexDirection: 'column',
+      transition: 'transform 0.2s ease'
     }}>
-      <p style={{ fontSize: '10px', fontWeight: 800, color: '#94a3b8', marginBottom: '12px', letterSpacing: '0.1em' }}>{label?.toUpperCase()}</p>
+      <p style={{ 
+        fontSize: '11px', 
+        fontWeight: 900, 
+        color: '#64748b', 
+        marginBottom: '16px', 
+        letterSpacing: '0.15em', 
+        textTransform: 'uppercase' 
+      }}>{label}</p>
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '8px',
+        gap: '10px',
         alignItems: 'center',
         flex: 1
       }}>
         {isString ? (
           <p style={{
-            fontSize: value?.length > 15 ? '16px' : '24px',
-            fontWeight: 900,
+            fontSize: value?.length > 15 ? '20px' : '28px',
+            fontWeight: 950,
             color: '#0f172a',
             margin: 0,
-            lineHeight: 1.2,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word'
+            lineHeight: 1.1,
+            letterSpacing: '-0.5px'
           }}>{value}</p>
         ) : value}
       </div>
@@ -119,7 +135,7 @@ function StatPill({ label, value, accentRaw }) {
   )
 }
 
-/** ── Layout 01: Classic Split (Refined & Responsive) ── */
+/** ── Layout 01: Classic Split (Refined UI) ── */
 function ClassicLayout({ p, colors, sizes }) {
   const palette = {
     bg: '#0f172a',
@@ -136,7 +152,7 @@ function ClassicLayout({ p, colors, sizes }) {
     <div
       id="live-poster-node"
       style={{
-        display: 'flex', width: '1200px', minHeight: '750px', height: 'auto',
+        display: 'flex', width: '1200px', minHeight: '800px', height: 'auto',
         borderRadius: '0px', overflow: 'hidden',
         boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5)',
         fontFamily: '"Inter", sans-serif', margin: '0 auto', position: 'relative',
@@ -149,65 +165,74 @@ function ClassicLayout({ p, colors, sizes }) {
       }}>
         <div style={{
           position: 'absolute', inset: 0, background: `url(${imgUrl}) center/cover no-repeat`,
-          filter: 'brightness(0.35) blur(2px)', transform: 'scale(1.1)'
+          filter: 'brightness(0.3) saturate(0.5) blur(3px)', transform: 'scale(1.1)'
         }} />
-        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${palette.bg}cc, transparent)` }} />
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${palette.bg}, transparent)` }} />
         
-        {/* Brand badge top-left */}
+        {/* Brand badge top-left (Simplified) */}
         <div style={{
-          position: 'relative', zIndex: 10, margin: '32px', display: 'flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', borderRadius: '14px',
-          padding: '10px 18px', border: '1px solid rgba(255,255,255,0.2)', width: 'fit-content',
+          position: 'relative', zIndex: 10, margin: '40px', display: 'flex', alignItems: 'center', 
+          background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', borderRadius: '4px',
+          padding: '12px 24px', border: '1px solid rgba(255,255,255,0.1)', width: 'fit-content',
         }}>
-          <Zap size={14} fill={palette.accent} color={palette.accent} />
-          <span style={{ color: 'white', fontSize: '12px', fontWeight: 900, letterSpacing: '1px', textTransform: 'uppercase' }}>nandkishor readymade</span>
+          <span style={{ color: 'white', fontSize: '13px', fontWeight: 900, letterSpacing: '2px', textTransform: 'uppercase' }}>nandkishor readymade</span>
         </div>
 
-        {/* Main product image spotlight */}
+        {/* Main product image spotlight - Portrait Aspect Ratio (2:3) */}
         <div style={{
-          position: 'relative', margin: 'auto',
-          width: '85%', height: '550px', background: `url(${imgUrl}) center/contain no-repeat`,
-          borderRadius: '24px', filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.8))', zIndex: 5
+          position: 'relative', 
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          marginTop: '40px',
+          marginBottom: '40px',
+          height:'100%',
+          width: '82%', 
+          aspectRatio: '2 / 3',
+          background: `url(${imgUrl}) center/cover no-repeat`,
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '6px',
+          boxShadow: '0 40px 100px -20px rgba(0,0,0,0.8)', 
+          zIndex: 5
         }} />
       </div>
 
       {/* ── RIGHT: INFO PANEL ──────────────────────────────────────── */}
-      <div style={{ flex: 1, background: '#ffffff', display: 'flex', flexDirection: 'column', padding: '48px', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 0, right: 0, width: '300px', height: '300px', background: `radial-gradient(circle at top right, ${palette.accent}15, transparent 70%)`, pointerEvents: 'none' }} />
+      <div style={{ flex: 1, background: '#ffffff', display: 'flex', flexDirection: 'column', padding: '60px 50px', position: 'relative' }}>
+        {/* Background Watermark */}
+        <div style={{ position: 'absolute', bottom: '20px', right: '20px', fontSize: '240px', fontWeight: 950, color: '#f1f5f9', opacity: 0.4, letterSpacing: '-0.05em', zIndex: 0, lineHeight: 1, pointerEvents: 'none' }}>NK</div>
+        
+        <div style={{ position: 'absolute', top: 0, right: 0, width: '400px', height: '400px', background: `radial-gradient(circle at top right, ${palette.accent}10, transparent 70%)`, pointerEvents: 'none', zIndex: 0 }} />
 
         {/* Header Section */}
-        <div style={{ position: 'relative', zIndex: 1, marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ position: 'relative', zIndex: 1, marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div style={{ flex: 1 }}>
             {p.category && (
               <div style={{ 
                 display: 'inline-flex', alignItems: 'center', gap: '8px', 
-                background: '#000', color: palette.accent, 
-                padding: '6px 14px', borderRadius: '100px', 
+                background: '#0f172a', color: palette.accent, 
+                padding: '6px 16px', borderRadius: '4px', 
                 fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', 
-                marginBottom: '16px', letterSpacing: '1px' 
+                marginBottom: '16px', letterSpacing: '2px' 
               }}>
-                <Award size={12} /> {p.category}
+                {p.category}
               </div>
             )}
-            <h1 style={{ fontSize: '42px', fontWeight: 900, color: '#0f172a', lineHeight: 1.1, textTransform: 'uppercase' }}>
+            <h1 style={{ fontSize: '48px', fontWeight: 950, color: '#0f172a', lineHeight: 1, textTransform: 'uppercase', letterSpacing: '-1px' }}>
               {p.name}
             </h1>
           </div>
-          <div style={{ background: '#f8fafc', border: '2px solid #e2e8f0', borderRadius: '16px', padding: '12px 20px', textAlign: 'right' }}>
-            <p style={{ fontSize: '11px', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>Model Code</p>
-            <p style={{ fontSize: '20px', fontWeight: 900, color: '#0f172a', fontFamily: 'monospace' }}>{p.customCode || p.autoId}</p>
+          <div style={{ background: '#0f172a', borderRadius: '4px', padding: '15px 24px', textAlign: 'right', boxShadow: '0 10px 20px -5px rgba(15, 23, 42, 0.3)' }}>
+            <p style={{ fontSize: '10px', color: palette.accent, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>Product Code</p>
+            <p style={{ fontSize: '24px', fontWeight: 950, color: '#ffffff', fontFamily: 'monospace' }}>{p.customCode || p.autoId}</p>
           </div>
         </div>
 
         {/* Pricing Matrix */}
         {hasSizes && (
-          <div style={{ position: 'relative', zIndex: 1, background: '#0f172a', borderRadius: '28px', padding: '32px', marginBottom: '32px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '4px', height: '18px', background: palette.accent, borderRadius: '2px' }} />
-                <p style={{ fontSize: '14px', fontWeight: 900, color: '#fff', textTransform: 'uppercase', letterSpacing: '1.5px', margin: 0 }}>Size & Price Matrix</p>
-              </div>
-              <span style={{ fontSize: '10px', fontWeight: 900, color: palette.accent, border: `1px solid ${palette.accent}40`, padding: '4px 10px', borderRadius: '6px' }}>B2B NET RATES</span>
+          <div style={{ position: 'relative', zIndex: 1, background: '#0f172a', padding: '36px', marginBottom: '32px', borderLeft: `8px solid ${palette.accent}`, boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.4)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 950, color: '#fff', textTransform: 'uppercase', letterSpacing: '3px', margin: 0 }}>Size & Price Matrix</p>
+              <span style={{ fontSize: '10px', fontWeight: 900, color: palette.accent, letterSpacing: '1px' }}>★ B2B WHOLESALE RATES</span>
             </div>
 
             <div style={{
@@ -218,13 +243,13 @@ function ClassicLayout({ p, colors, sizes }) {
               {p.sizePricings.map((sp, i) => (
                 <div key={i} style={{
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  padding: '14px 20px', background: 'rgba(255,255,255,0.05)',
-                  borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)'
+                  padding: '16px 24px', background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.06)'
                 }}>
-                  <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', fontWeight: 700 }}>Size {sp.size}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ color: palette.accent, fontSize: '16px', fontWeight: 800 }}>₹</span>
-                    <span style={{ color: 'white', fontSize: '24px', fontWeight: 900 }}>{sp.price}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px', fontWeight: 800 }}>SIZE {sp.size}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ color: palette.accent, fontSize: '18px', fontWeight: 900 }}>₹</span>
+                    <span style={{ color: 'white', fontSize: '28px', fontWeight: 950, letterSpacing: '-1px' }}>{sp.price}</span>
                   </div>
                 </div>
               ))}
@@ -238,7 +263,7 @@ function ClassicLayout({ p, colors, sizes }) {
             position: 'relative', zIndex: 1, 
             display: 'grid', 
             gridTemplateColumns: (hasColors && hasSizes) ? '1fr 1fr' : '1fr', 
-            gap: '20px', marginBottom: '40px' 
+            gap: '24px', marginBottom: '48px' 
           }}>
             {hasColors && (
               <StatPill
@@ -250,11 +275,11 @@ function ClassicLayout({ p, colors, sizes }) {
                   return (
                     <div key={i} style={{ 
                       display: 'flex', alignItems: 'center', gap: '8px', 
-                      background: '#f8fafc', padding: '6px 12px', borderRadius: '12px', 
-                      border: '1px solid #e2e8f0', boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                      background: '#fff', padding: '6px 14px', border: '1px solid #e2e8f0',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
                     }}>
-                      <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: hex, border: '1px solid rgba(0,0,0,0.1)' }} />
-                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#1e293b' }}>{name}</span>
+                      <div style={{ width: '12px', height: '12px', background: hex, border: '1px solid rgba(0,0,0,0.1)' }} />
+                      <span style={{ fontSize: '11px', fontWeight: 900, color: '#0f172a', textTransform: 'uppercase' }}>{name}</span>
                     </div>
                   );
                 })}
@@ -262,8 +287,8 @@ function ClassicLayout({ p, colors, sizes }) {
             )}
             {hasSizes && (
               <StatPill 
-                label="Size Variations" 
-                value={p.sizePricings.map(s => s.size).join(' • ')} 
+                label="Full Size Run" 
+                value={p.sizePricings.map(s => s.size).join(' / ')} 
                 accentRaw={palette.pillAccent} 
               />
             )}
@@ -271,21 +296,12 @@ function ClassicLayout({ p, colors, sizes }) {
         )}
 
         {/* Footer section */}
-        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '32px', borderTop: '2px solid #f1f5f9' }}>
+        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '40px', borderTop: '4px solid #0f172a' }}>
           <div>
-            <p style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 800, textTransform: 'uppercase', marginBottom: '8px' }}>Crafted with Quality</p>
-            <h4 style={{ fontSize: '20px', fontWeight: 950, textTransform: 'uppercase', color: '#0f172a', letterSpacing: '-0.5px' }}>
+            <p style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 900, textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '1px' }}>Wholesale Catalog</p>
+            <h4 style={{ fontSize: '24px', fontWeight: 950, textTransform: 'uppercase', color: '#0f172a', letterSpacing: '-1px' }}>
               nandkishor <span style={{ color: palette.accent }}>readymade</span>
             </h4>
-          </div>
-          <div style={{ display: 'flex', gap: '16px', background: '#f8fafc', padding: '12px 20px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
-              <Truck size={16} /> <span style={{ fontSize: '10px', fontWeight: 800 }}>PAN INDIA</span>
-            </div>
-            <div style={{ width: '1px', background: '#e2e8f0' }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
-              <Award size={16} /> <span style={{ fontSize: '10px', fontWeight: 800 }}>BULK ONLY</span>
-            </div>
           </div>
         </div>
       </div>
@@ -293,31 +309,25 @@ function ClassicLayout({ p, colors, sizes }) {
   )
 }
 
-/** ── Layout 02: Minimalist Luxury ── */
+/** ── Layout 02: Minimalist Luxury (Refined & Sharp) ── */
 function MinimalLayout({ p, colors, sizes }) {
   const gold = '#cfae70';
   const charcoal = '#1e1e1e';
-  const ivory = '#fcfaf7';
+  const ivory = '#ffffff';
 
   return (
     <div id="live-poster-node" style={{
-      width: '1200px', minHeight: '750px', height: 'auto', padding: '0', background: ivory,
-      display: 'flex', position: 'relative', fontFamily: "'Inter', sans-serif", overflow: 'hidden', border: '1px solid #e5e7eb'
+      width: '1200px', minHeight: '800px', height: 'auto', padding: '0', background: ivory,
+      display: 'flex', position: 'relative', fontFamily: "'Inter', sans-serif", overflow: 'hidden', border: '1px solid #1e1e1e'
     }}>
-      {/* ── Outer Decorative Frame ── */}
-      <div style={{ position: 'absolute', inset: '24px', border: `1px solid ${gold}40`, pointerEvents: 'none', zIndex: 10 }}></div>
-      <div style={{ position: 'absolute', inset: '32px', border: `1px solid ${gold}20`, pointerEvents: 'none', zIndex: 10 }}></div>
+      {/* ── Outer Decorative Frame (Sharp Cornered) ── */}
+      <div style={{ position: 'absolute', inset: '20px', border: `1px solid ${gold}60`, pointerEvents: 'none', zIndex: 10 }}></div>
+      <div style={{ position: 'absolute', inset: '30px', border: `1px solid ${charcoal}10`, pointerEvents: 'none', zIndex: 10 }}></div>
 
-      {/* ── LEFT: ARTISTIC IMAGE PANEL ── */}
-      <div style={{ flex: '0 0 55%', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '60px' }}>
-        <div style={{
-          width: '100%', height: '100%', position: 'relative',
-          background: 'white', borderRadius: '4px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'
-        }}>
-          {/* Subtle background texture or watermark */}
-          <div style={{ position: 'absolute', bottom: '20px', right: '20px', fontSize: '80px', fontWeight: 900, color: '#000', opacity: 0.02, letterSpacing: '-0.05em' }}>PREMIUM</div>
-
+      {/* ── LEFT: ARCHITECTURAL IMAGE PANEL ── */}
+      <div style={{ flex: '0 0 50%', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f8f8', borderRight: `1px solid ${charcoal}15` }}>
+        <div style={{ width: '82%', height: '82%', background: 'white', position: 'relative', boxShadow: 'none', border: `1px solid ${charcoal}05`, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', top: '15px', left: '15px', color: gold, fontSize: '10px', fontWeight: 900, letterSpacing: '0.4em' }}>[ PREMIUM SELECT ]</div>
           {p.images?.[0] && (
             <img
               src={p.images[0].src}
@@ -328,50 +338,75 @@ function MinimalLayout({ p, colors, sizes }) {
         </div>
       </div>
 
-      {/* ── RIGHT: SOPHISTICATED DETAILS ── */}
-      <div style={{ flex: 1, padding: '80px 60px 80px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ marginBottom: '40px' }}>
-          <p style={{ fontSize: '12px', fontWeight: 800, color: gold, letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '16px' }}>Catalog Selection</p>
-          <h1 style={{ fontSize: '48px', fontWeight: 300, color: charcoal, margin: 0, lineHeight: 1.1, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            {p.name} {p.customCode && <span style={{ fontSize: '24px', opacity: 0.5, marginLeft: '10px' }}>[{p.customCode}]</span>}
-          </h1>
-          <div style={{ width: '60px', height: '3px', background: gold, marginTop: '24px' }}></div>
+      {/* ── RIGHT: GEOMETRIC DETAILS ── */}
+      <div style={{ flex: 1, padding: '80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', position: 'relative' }}>
+        {/* Top Label */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+          <div style={{ width: '24px', height: '1px', background: gold }}></div>
+          <p style={{ fontSize: '10px', fontWeight: 900, color: gold, letterSpacing: '0.5em', textTransform: 'uppercase' }}>Established Excellence</p>
         </div>
 
-        <div style={{ marginBottom: '48px' }}>
-          <h3 style={{ fontSize: '11px', fontWeight: 800, color: charcoal, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '24px', opacity: 0.6 }}>Rate Matrix / Sizes</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: p.sizePricings?.length > 4 ? '1fr 1fr' : '1fr', gap: '16px 40px' }}>
-            {p.sizePricings?.map((sp, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '1px solid #e5e7eb', paddingBottom: '8px' }}>
-                <span style={{ fontWeight: 600, fontSize: '14px', color: '#6b7280' }}>{sp.size}</span>
-                <span style={{ fontWeight: 800, fontSize: '18px', color: charcoal }}>₹{Number(sp.price).toLocaleString('en-IN')}</span>
-              </div>
-            ))}
+        <div style={{ marginBottom: '60px' }}>
+          <h1 style={{ fontSize: '56px', fontWeight: 200, color: charcoal, margin: 0, lineHeight: 1, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            {p.name}
+          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '20px' }}>
+            <span style={{ fontSize: '12px', fontWeight: 900, color: charcoal, letterSpacing: '0.2em' }}>{p.category || 'COLLECTION'}</span>
+            <div style={{ width: '4px', height: '4px', background: gold }}></div>
+            <span style={{ fontSize: '12px', fontWeight: 900, color: charcoal, letterSpacing: '0.2em' }}>{p.autoId}</span>
           </div>
         </div>
 
+        {/* Pricing Matrix (Menu Style) */}
+        <div style={{ marginBottom: '50px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: `2px solid ${charcoal}`, paddingBottom: '12px', marginBottom: '24px' }}>
+            <h3 style={{ fontSize: '12px', fontWeight: 900, color: charcoal, textTransform: 'uppercase', letterSpacing: '0.3em' }}>Rate Matrix</h3>
+            <span style={{ fontSize: '10px', fontWeight: 800, color: gold, textTransform: 'uppercase', letterSpacing: '0.2em' }}>★ Star Signature</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+            {p.sizePricings?.length > 0 ? (
+              p.sizePricings.map((sp, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: '4px', borderBottom: `1px solid ${charcoal}10` }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                    <span style={{ fontWeight: 800, fontSize: '14px', color: charcoal }}>SIZE {sp.size}</span>
+                    <span style={{ fontWeight: 400, fontSize: '10px', color: '#999', letterSpacing: '0.1em' }}>/ UNIT PRICE</span>
+                  </div>
+                  <span style={{ fontWeight: 900, fontSize: '24px', color: charcoal, letterSpacing: '-0.02em' }}>₹{sp.price}</span>
+                </div>
+              ))
+            ) : (
+              <p style={{ fontSize: '12px', opacity: 0.5 }}>No pricing data provided</p>
+            )}
+          </div>
+        </div>
+
+        {/* Available Colors (Minimalist Tags) */}
         <div style={{ marginBottom: '40px' }}>
-          <h3 style={{ fontSize: '11px', fontWeight: 800, color: charcoal, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '16px', opacity: 0.6 }}>Available Palette</h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <h3 style={{ fontSize: '11px', fontWeight: 900, color: charcoal, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '20px' }}>Available Palette</h3>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
             {p.colors?.filter(Boolean).map((c, i) => {
               const name = typeof c === 'object' ? c.name : c;
               const hex = typeof c === 'object' ? c.hex : c;
               return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'white', padding: '4px 12px', borderRadius: '100px', border: '1px solid #e5e7eb', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: hex, border: '1px solid rgba(0,0,0,0.1)' }} />
-                  <span style={{ fontSize: '11px', color: charcoal, fontWeight: 700 }}>{name}</span>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', border: `1px solid ${charcoal}15`, padding: '6px 14px', background: '#fff' }}>
+                  <div style={{ width: '8px', height: '8px', background: hex, border: '1px solid rgba(0,0,0,0.1)' }} />
+                  <span style={{ fontSize: '10px', color: charcoal, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{name}</span>
                 </div>
               );
             })}
           </div>
         </div>
 
-        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '32px' }}>
+        {/* Minimal Footer */}
+        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div>
-            <div style={{ fontSize: '14px', fontWeight: 900, color: charcoal, letterSpacing: '0.1em' }}>NK <span style={{ fontWeight: 300, color: gold }}>READYMADE</span></div>
-            <p style={{ fontSize: '9px', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', marginTop: '4px' }}>Established Excellence · Wholesale</p>
+            <div style={{ fontSize: '18px', fontWeight: 900, color: charcoal, letterSpacing: '0.05em' }}>NANDKISHOR <span style={{ fontWeight: 200, color: gold }}>READYMADE</span></div>
+            <p style={{ fontSize: '8px', fontWeight: 800, color: '#aaa', textTransform: 'uppercase', marginTop: '6px', letterSpacing: '0.3em' }}>Bespoke Wholesale Excellence Since 1994</p>
           </div>
-          <div style={{ background: charcoal, color: 'white', padding: '8px 16px', fontSize: '10px', fontWeight: 800, borderRadius: '2px', letterSpacing: '0.1em' }}>{p.autoId}</div>
+          <div style={{ border: `1px solid ${charcoal}`, padding: '10px 18px', textAlign: 'center' }}>
+            <span style={{ display: 'block', fontSize: '16px', fontWeight: 900, color: charcoal }}>{p.customCode || p.autoId}</span>
+            <span style={{ display: 'block', fontSize: '8px', fontWeight: 800, color: gold, textTransform: 'uppercase', marginTop: '2px', letterSpacing: '0.1em' }}>Serial No.</span>
+          </div>
         </div>
       </div>
     </div>
