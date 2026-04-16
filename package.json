@@ -16,8 +16,8 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
-    "appId": "com.nandkishor.wholesale",
-    "productName": "Nandkishor Wholesale",
+    "appId": "com.nandkishor.wholesaleapp",
+    "productName": "Nandkishor-Wholesale",
     "directories": {
       "output": "dist-electron"
     },
