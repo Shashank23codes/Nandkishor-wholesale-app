@@ -35,15 +35,25 @@ export default function ShowcasePage({ product: p, onClose }) {
     }
     setIsDownloading(true)
     try {
+      // Improve capture by forcing specific styles during export
       const dataUrl = await htmlToImage.toPng(el, {
-        pixelRatio: 2,
+        pixelRatio: 3, // Increased for better quality
         backgroundColor: activeLayout === 'dark' ? '#020617' : (activeLayout === 'social' ? null : '#ffffff'),
-        skipWebFonts: true,
-        style: { transform: 'scale(1)', transformOrigin: 'top left' },
-        cacheBust: true, // Force re-render of images
+        skipWebFonts: false, // Ensure fonts are captured if possible
+        style: { 
+          transform: 'scale(1)', 
+          transformOrigin: 'top left',
+          margin: '0',
+          boxShadow: 'none',
+          borderRadius: '0'
+        },
+        cacheBust: true,
       })
       const link = document.createElement('a')
-      link.download = `Showcase_${p.name.replace(/\s+/g, '_')}_${activeLayout}.png`
+      // Requirement: Product name only for Classic and Play Two layouts
+      const isClassicOrPlayTwo = activeLayout === 'classic' || activeLayout === 'playtwo'
+      const safeName = p.name.replace(/[<>:"/\\|?*]/g, '_')
+      link.download = isClassicOrPlayTwo ? `${safeName}.png` : `Showcase_${safeName}_${activeLayout}.png`
       link.href = dataUrl
       link.click()
     } catch (err) {
@@ -60,10 +70,16 @@ export default function ShowcasePage({ product: p, onClose }) {
     setIsDownloading(true)
     try {
       const dataUrl = await htmlToImage.toPng(el, {
-        pixelRatio: 2,
+        pixelRatio: 3, // Increased for better quality
         backgroundColor: activeLayout === 'dark' ? '#020617' : (activeLayout === 'social' ? null : '#ffffff'),
-        skipWebFonts: true,
-        style: { transform: 'scale(1)', transformOrigin: 'top left' },
+        skipWebFonts: false,
+        style: { 
+          transform: 'scale(1)', 
+          transformOrigin: 'top left',
+          margin: '0',
+          boxShadow: 'none',
+          borderRadius: '0'
+        },
       })
       
       const res = await fetch('http://localhost:5000/api/save-poster', {
@@ -71,7 +87,10 @@ export default function ShowcasePage({ product: p, onClose }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           image: dataUrl,
-          filename: `Poster_${p.autoId}_${activeLayout}`
+          // Requirement: Save with product name only for specific layouts
+          filename: (activeLayout === 'classic' || activeLayout === 'playtwo')
+            ? p.name.replace(/[<>:"/\\|?*]/g, '_')
+            : `Poster_${p.autoId}_${activeLayout}`
         })
       })
       
@@ -91,6 +110,7 @@ export default function ShowcasePage({ product: p, onClose }) {
 
   const layouts = [
     { id: 'classic', icon: Columns2, label: 'Classic' },
+    { id: 'playtwo', icon: Layout, label: 'Play Two' },
     { id: 'minimal', icon: Layout, label: 'Minimal' },
     { id: 'social', icon: Square, label: 'Social' },
     { id: 'dark', icon: Terminal, label: 'Terminal' },

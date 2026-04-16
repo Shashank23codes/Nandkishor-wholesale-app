@@ -78,6 +78,7 @@ export default function ShowcasePoster({ product, layout = 'classic', customDesc
           case 'minimal': return <MinimalLayout p={p} colors={colorsText} sizes={sizes} />
           case 'social': return <SocialSquareLayout p={p} colors={colorsText} sizes={sizes} customDesc={customDesc} theme={theme} />
           case 'dark': return <DarkTerminalLayout p={p} colors={colorsText} sizes={sizes} />
+          case 'playtwo': return <PlayTwoLayout p={p} colors={colorsText} sizes={sizes} />
           case 'classic':
           default: return <ClassicLayout p={p} colors={colorsText} sizes={sizes} />
         }
@@ -154,9 +155,9 @@ function ClassicLayout({ p, colors, sizes }) {
       style={{
         display: 'flex', width: '1200px', minHeight: '800px', height: 'auto',
         borderRadius: '0px', overflow: 'hidden',
-        boxShadow: '0 40px 80px -20px rgba(0,0,0,0.5)',
-        fontFamily: '"Inter", sans-serif', margin: '0 auto', position: 'relative',
-        background: '#fff'
+        // Removed boxShadow to fix the white line/extra margin in capture
+        fontFamily: '"Inter", sans-serif', margin: '0', position: 'relative',
+        background: palette.bg // Match left panel to prevent sub-pixel white gaps
       }}
     >
       {/* ── LEFT: IMAGE PANEL ──────────────────────────────────────── */}
@@ -565,6 +566,101 @@ function DarkTerminalLayout({ p, colors, sizes }) {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+/** ── Layout 05: Play Two (Modern & Bold) ── */
+function PlayTwoLayout({ p, colors, sizes }) {
+  const palette = {
+    bg: '#0a0a0a',
+    accent: '#fbbf24',
+    secondary: '#171717'
+  }
+  const imgUrl = p.images?.[0]?.src || ''
+
+  return (
+    <div
+      id="live-poster-node"
+      style={{
+        width: '1200px', height: '800px', background: '#fff',
+        display: 'flex', fontFamily: '"Inter", sans-serif', overflow: 'hidden'
+      }}
+    >
+      {/* Sidebar Split */}
+      <div style={{ width: '80px', background: palette.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0' }}>
+        <div style={{ transform: 'rotate(-90deg)', whiteSpace: 'nowrap', color: '#fff', fontSize: '12px', fontWeight: 900, letterSpacing: '8px', opacity: 0.5 }}>
+          NANDKISHOR READYMADE
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
+        {/* Top Header */}
+        <div style={{ padding: '60px 80px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <div style={{ display: 'inline-block', background: palette.bg, color: palette.accent, padding: '4px 12px', fontSize: '10px', fontWeight: 950, letterSpacing: '2px', marginBottom: '15px' }}>
+              {p.category || 'COLLECTION'}
+            </div>
+            <h1 style={{ fontSize: '72px', fontWeight: 950, color: '#000', margin: 0, textTransform: 'uppercase', lineHeight: 0.9, letterSpacing: '-2px' }}>
+              {p.name}
+            </h1>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ fontSize: '10px', fontWeight: 900, opacity: 0.4, letterSpacing: '2px', marginBottom: '5px' }}>PRODUCT CODE</p>
+            <p style={{ fontSize: '24px', fontWeight: 950, color: palette.bg }}>{p.customCode || p.autoId}</p>
+          </div>
+        </div>
+
+        {/* Product Visual & Pricing */}
+        <div style={{ flex: 1, display: 'flex', padding: '0 80px 60px' }}>
+          {/* Left Visual Area */}
+          <div style={{ flex: '0 0 45%', position: 'relative' }}>
+             <div style={{ position: 'absolute', inset: '0', background: palette.bg, transform: 'rotate(-3deg)', borderRadius: '20px', opacity: 0.05 }}></div>
+             <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+               {imgUrl && <img src={imgUrl} crossOrigin="anonymous" style={{ maxHeight: '90%', maxWidth: '90%', objectFit: 'contain', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))' }} />}
+             </div>
+          </div>
+
+          {/* Right Data Area */}
+          <div style={{ flex: 1, paddingLeft: '60px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+            {/* Price List */}
+            <div>
+              <p style={{ fontSize: '11px', fontWeight: 950, letterSpacing: '4px', color: '#888', marginBottom: '25px' }}>ORDERING MATRIX</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {p.sizePricings?.map((sp, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px 0', borderBottom: '1px solid #eee' }}>
+                    <span style={{ fontSize: '16px', fontWeight: 800 }}>SIZE {sp.size}</span>
+                    <span style={{ fontSize: '22px', fontWeight: 950, color: palette.bg }}>₹{sp.price}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Sizes & Colors */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginTop: 'auto' }}>
+               <div>
+                 <p style={{ fontSize: '10px', fontWeight: 900, opacity: 0.4, letterSpacing: '2px', marginBottom: '10px' }}>VARIANTS</p>
+                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {p.colors?.filter(Boolean).map((c, i) => {
+                      const hex = typeof c === 'object' ? c.hex : c;
+                      return <div key={i} style={{ width: '14px', height: '14px', background: hex, border: '1px solid #ddd' }} />
+                    })}
+                 </div>
+               </div>
+               <div>
+                 <p style={{ fontSize: '10px', fontWeight: 900, opacity: 0.4, letterSpacing: '2px', marginBottom: '10px' }}>AVAILABILITY</p>
+                 <p style={{ fontSize: '14px', fontWeight: 900 }}>IN STOCK</p>
+               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{ borderTop: '1px solid #eee', padding: '30px 80px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+           <p style={{ fontSize: '11px', fontWeight: 800, opacity: 0.6 }}>© 2026 NANDKISHOR READYMADE</p>
+           <p style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '2px' }}>CATALOGUE V2.0</p>
         </div>
       </div>
     </div>
