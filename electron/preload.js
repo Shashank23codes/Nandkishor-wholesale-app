@@ -6,7 +6,11 @@ contextBridge.exposeInMainWorld('electron', {
   selectPosterFolder: () => ipcRenderer.invoke('select-poster-folder'),
   getPosterStoragePath: () => ipcRenderer.invoke('get-poster-storage-path'),
   restartServer: () => ipcRenderer.send('restart-server'),
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
   onUpdateAvailable: (cb) => ipcRenderer.on('update-available', cb),
   onUpdateDownloaded: (cb) => ipcRenderer.on('update-downloaded', cb),
+  onUpdateMessage: (cb) => {
+    ipcRenderer.on('update-message', (event, message) => cb(message));
+  },
   restartApp: () => ipcRenderer.send('restart-app')
 });

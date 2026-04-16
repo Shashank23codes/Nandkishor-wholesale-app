@@ -15,6 +15,20 @@ export default function SettingsPage() {
         const pPath = await window.electron.getPosterStoragePath()
         setStoragePath(path || 'Not set (Using default)')
         setPosterPath(pPath || 'Not set (Using default)')
+
+        // Listen for update messages
+        window.electron.onUpdateMessage((msg) => {
+          setUpdateStatus(msg)
+        })
+
+        // Listen for update downloaded
+        window.electron.onUpdateDownloaded(() => {
+          toast.success('Update ready! Click Search Updates to install.', {
+            duration: 10000,
+            icon: '🚀'
+          })
+          setUpdateStatus('Update downloaded. Ready to install.')
+        })
       }
     }
     loadSettings()
@@ -50,13 +64,27 @@ export default function SettingsPage() {
     }
   }
 
-  const checkUpdates = () => {
+  const checkUpdates = async () => {
+    if (!window.electron) return
+
+    if (updateStatus === 'Update downloaded. Ready to install.') {
+      window.electron.restartApp()
+      return
+    }
+
     setIsCheckingUpdate(true)
-    // In a real app, this would trigger electron-updater
-    setTimeout(() => {
+    try {
+      const result = await window.electron.checkForUpdates()
+      if (result && result.error) {
+        toast.error(result.error)
+      } else if (result && result.status === 'dev') {
+        toast.error('Updates not available in development mode')
+      }
+    } catch (err) {
+      toast.error('Failed to check for updates')
+    } finally {
       setIsCheckingUpdate(false)
-      toast.success('No updates found')
-    }, 1500)
+    }
   }
 
   return (
@@ -151,7 +179,7 @@ export default function SettingsPage() {
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 {updateStatus}
               </div>
-              <span className="px-2 py-0.5 bg-slate-800 text-slate-400 text-[10px] font-black rounded uppercase tracking-widest border border-slate-700">v1.0.0</span>
+              <span className="px-2 py-0.5 bg-slate-800 text-slate-400 text-[10px] font-black rounded uppercase tracking-widest border border-slate-700">v1.0.1</span>
             </div>
             <button
               onClick={checkUpdates}
@@ -159,7 +187,7 @@ export default function SettingsPage() {
               className={`w-full sm:w-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-black rounded-lg transition-all shadow-lg shadow-indigo-900/20 flex items-center justify-center gap-2 uppercase tracking-widest ${isCheckingUpdate ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isCheckingUpdate ? 'animate-spin' : ''}`} />
-              Search Updates
+              {updateStatus === 'Update downloaded. Ready to install.' ? 'Install & Restart' : 'Search Updates'}
             </button>
           </div>
         </section>

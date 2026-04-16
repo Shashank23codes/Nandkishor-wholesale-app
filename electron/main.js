@@ -167,11 +167,39 @@ ipcMain.on('restart-server', () => {
 });
 
 // 6. Auto Updater Events
-autoUpdater.on('update-available', () => {
-  mainWindow.webContents.send('update-available');
+ipcMain.handle('check-for-updates', async () => {
+  if (!app.isPackaged) return { status: 'dev' };
+  try {
+    const result = await autoUpdater.checkForUpdates();
+    return result;
+  } catch (err) {
+    return { error: err.message };
+  }
+});
+
+autoUpdater.on('checking-for-update', () => {
+  mainWindow.webContents.send('update-message', 'Checking for update...');
+});
+
+autoUpdater.on('update-available', (info) => {
+  mainWindow.webContents.send('update-message', 'Update available. Downloading...');
+  mainWindow.webContents.send('update-available', info);
+});
+
+autoUpdater.on('update-not-available', () => {
+  mainWindow.webContents.send('update-message', 'Your app is up to date');
+});
+
+autoUpdater.on('error', (err) => {
+  mainWindow.webContents.send('update-message', 'Error in auto-updater: ' + err.message);
+});
+
+autoUpdater.on('download-progress', (progressObj) => {
+  mainWindow.webContents.send('update-message', `Downloading ${Math.floor(progressObj.percent)}%`);
 });
 
 autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update-message', 'Update downloaded. Restarting...');
   mainWindow.webContents.send('update-downloaded');
 });
 
