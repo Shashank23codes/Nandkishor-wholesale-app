@@ -513,16 +513,16 @@ export default function AddDataPage({ onAdd, onUpdate, onCancel, nextSerial, pro
         <div>
           <SectionHead title="Sizes & Pricing" action={<AddBtn label="Add Size" onClick={addSP} />} />
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {sizePricings.map((sp, i) => (
-              <div key={i} className="grid grid-cols-[1fr_1fr_36px] gap-2 items-start">
-                <div>
-                  <div className="flex items-center justify-between mb-1 px-1">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase">Size</span>
+              <div key={i} className="grid grid-cols-[1fr_1fr_42px] gap-3 items-end bg-slate-900/20 p-2 rounded-xl border border-slate-800/30">
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">Size</span>
                     <button 
                       type="button" 
                       onClick={() => toggleCustomSize(i)}
-                      className="text-[9px] text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-tighter"
+                      className="text-[9px] text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest"
                     >
                       {sp.isCustom ? 'Use List' : 'Custom'}
                     </button>
@@ -542,16 +542,17 @@ export default function AddDataPage({ onAdd, onUpdate, onCancel, nextSerial, pro
                         onChange={(e) => setSP(i, 'size', e.target.value)}
                         className={SELECT}
                       >
-                        <option value="">Select</option>
+                        <option value="">Select size</option>
                         {SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
                       <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
                     </div>
                   )}
                 </div>
-                <div>
-                  <div className="mb-1 px-1">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase">Price (₹)</span>
+
+                <div className="flex flex-col gap-1.5">
+                  <div className="px-1 h-[14px] flex items-center">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">Price (₹)</span>
                   </div>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm select-none">₹</span>
@@ -565,12 +566,13 @@ export default function AddDataPage({ onAdd, onUpdate, onCancel, nextSerial, pro
                     />
                   </div>
                 </div>
-                <div className="pt-5">
+
+                <div className="flex items-center justify-end">
                   <button
                     type="button"
                     onClick={() => sizePricings.length > 1 && removeSP(i)}
                     disabled={sizePricings.length === 1}
-                    className="h-9 w-9 flex items-center justify-center text-slate-600 hover:text-red-400 disabled:opacity-20 transition-colors bg-slate-800/50 border border-slate-700 rounded-lg"
+                    className="h-9 w-9 flex items-center justify-center text-slate-600 hover:text-red-400 disabled:opacity-0 transition-all bg-slate-800/50 border border-slate-700 rounded-lg hover:border-red-500/30 hover:bg-red-500/5"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
