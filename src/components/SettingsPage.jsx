@@ -179,7 +179,7 @@ export default function SettingsPage() {
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 {updateStatus}
               </div>
-              <span className="px-2 py-0.5 bg-slate-800 text-slate-400 text-[10px] font-black rounded uppercase tracking-widest border border-slate-700">v1.0.1</span>
+              <span className="px-2 py-0.5 bg-slate-800 text-slate-400 text-[10px] font-black rounded uppercase tracking-widest border border-slate-700">v1.1.0</span>
             </div>
             <button
               onClick={checkUpdates}
