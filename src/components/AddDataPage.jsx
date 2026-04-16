@@ -227,9 +227,13 @@ export default function AddDataPage({ onAdd, onUpdate, onCancel, nextSerial, pro
   const removeColor = (i) => setColors((p) => p.filter((_, j) => j !== i))
 
   /* ── Sizes ── */
-  const setSP       = (i, f, v) => setSizePricings((p) => p.map((sp, j) => j === i ? { ...sp, [f]: v } : sp))
-  const addSP       = () => setSizePricings((p) => [...p, { size: '', price: '' }])
-  const removeSP    = (i) => setSizePricings((p) => p.filter((_, j) => j !== i))
+  const setSP = (i, f, v) => setSizePricings((p) => p.map((sp, j) => j === i ? { ...sp, [f]: v } : sp))
+  const addSP = () => setSizePricings((p) => [...p, { size: '', price: '', isCustom: false }])
+  const removeSP = (i) => setSizePricings((p) => p.filter((_, j) => j !== i))
+  const toggleCustomSize = (i) => setSizePricings((p) => p.map((sp, j) => j === i ? { ...sp, isCustom: !sp.isCustom, size: '' } : sp))
+
+  /* ── Validate ── */
+// ... (rest of the code update below in the actual replacement block)
 
   /* ── Validate ── */
   const validate = () => {
@@ -509,46 +513,68 @@ export default function AddDataPage({ onAdd, onUpdate, onCancel, nextSerial, pro
         <div>
           <SectionHead title="Sizes & Pricing" action={<AddBtn label="Add Size" onClick={addSP} />} />
 
-          {/* Column headers */}
-          <div className="grid grid-cols-[1fr_1fr_36px] gap-2 mb-2 px-0.5">
-            <p className="text-[11px] text-slate-600">Size</p>
-            <p className="text-[11px] text-slate-600">Price (₹)</p>
-            <span />
-          </div>
-
-          <div className="space-y-2">
+          <div className="space-y-3">
             {sizePricings.map((sp, i) => (
-              <div key={i} className="grid grid-cols-[1fr_1fr_36px] gap-2 items-center">
-                <div className="relative">
-                  <select
-                    value={sp.size}
-                    onChange={(e) => setSP(i, 'size', e.target.value)}
-                    className={SELECT}
+              <div key={i} className="grid grid-cols-[1fr_1fr_36px] gap-2 items-start">
+                <div>
+                  <div className="flex items-center justify-between mb-1 px-1">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase">Size</span>
+                    <button 
+                      type="button" 
+                      onClick={() => toggleCustomSize(i)}
+                      className="text-[9px] text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-tighter"
+                    >
+                      {sp.isCustom ? 'Use List' : 'Custom'}
+                    </button>
+                  </div>
+                  {sp.isCustom ? (
+                    <input
+                      type="text"
+                      value={sp.size}
+                      onChange={(e) => setSP(i, 'size', e.target.value)}
+                      placeholder="e.g. 5XL"
+                      className={INPUT}
+                    />
+                  ) : (
+                    <div className="relative">
+                      <select
+                        value={sp.size}
+                        onChange={(e) => setSP(i, 'size', e.target.value)}
+                        className={SELECT}
+                      >
+                        <option value="">Select</option>
+                        {SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
+                      </select>
+                      <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="mb-1 px-1">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase">Price (₹)</span>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm select-none">₹</span>
+                    <input
+                      type="number"
+                      value={sp.price}
+                      onChange={(e) => setSP(i, 'price', e.target.value)}
+                      min="0"
+                      placeholder="0"
+                      className="bg-slate-800 border border-slate-700 rounded-md pl-7 pr-3 h-9 w-full text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-600"
+                    />
+                  </div>
+                </div>
+                <div className="pt-5">
+                  <button
+                    type="button"
+                    onClick={() => sizePricings.length > 1 && removeSP(i)}
+                    disabled={sizePricings.length === 1}
+                    className="h-9 w-9 flex items-center justify-center text-slate-600 hover:text-red-400 disabled:opacity-20 transition-colors bg-slate-800/50 border border-slate-700 rounded-lg"
                   >
-                    <option value="">Size</option>
-                    {SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm select-none">₹</span>
-                  <input
-                    type="number"
-                    value={sp.price}
-                    onChange={(e) => setSP(i, 'price', e.target.value)}
-                    min="0"
-                    placeholder="0"
-                    className="bg-slate-800 border border-slate-700 rounded-md pl-7 pr-3 h-9 w-full text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-600"
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => sizePricings.length > 1 && removeSP(i)}
-                  disabled={sizePricings.length === 1}
-                  className="h-9 w-9 flex items-center justify-center text-slate-600 hover:text-red-400 disabled:opacity-20 transition-colors"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
               </div>
             ))}
           </div>
